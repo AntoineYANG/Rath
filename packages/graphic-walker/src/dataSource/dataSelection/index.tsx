@@ -24,6 +24,8 @@ const DataSelection: React.FC = props =>{
                         sourceType === 'file' ? 'underline' : ''
                     } hover:bg-gray-200 hover:text-purple-600`
                 }
+                role="button"
+                tabIndex={0}
                 onClick={() => { setSourceType('file'); }}
             >
                 {t('dialog.text_file_data')}
@@ -34,6 +36,8 @@ const DataSelection: React.FC = props =>{
                         sourceType === 'public' ? 'underline' : ''
                     } hover:bg-gray-200 hover:text-purple-600`
                 }
+                role="button"
+                tabIndex={0}
                 onClick={() => { setSourceType('public'); }}
             >
                 {t('dialog.public_data')}

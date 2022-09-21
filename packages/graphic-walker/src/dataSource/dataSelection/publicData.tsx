@@ -35,6 +35,8 @@ const PublicData: React.FC<IPublicDataProps> = props => {
                             })
                         })
                     }}
+                    role="button"
+                    tabIndex={0}
                     className="border rounded border-gray-400 p-2 m-2 cursor-pointer hover:bg-gray-50"
                     >
                 <div>{data.title}</div>
