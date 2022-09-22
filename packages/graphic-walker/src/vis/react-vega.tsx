@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { IViewField, IRow } from '../interfaces';
+import { IViewField } from '../interfaces';
 import embed from 'vega-embed';
 import { Subject } from 'rxjs'
 import * as op from 'rxjs/operators';
@@ -8,6 +8,8 @@ import { autoMark } from '../utils/autoMark';
 import { ISemanticType } from 'visual-insights';
 import styled from 'styled-components';
 import { COUNT_FIELD_ID } from '../constants';
+import type Rath from '@kanaries/rath-utils/dist/lib/global';
+
 
 const CanvaContainer = styled.div<{rowSize: number; colSize: number;}>`
   display: grid;
@@ -19,7 +21,7 @@ const SELECTION_NAME = 'geom';
 interface ReactVegaProps {
   rows: Readonly<IViewField[]>;
   columns: Readonly<IViewField[]>;
-  dataSource: IRow[];
+  dataSource: Rath.IRow[];
   defaultAggregate?: boolean;
   defaultStack?: boolean;
   interactiveScale: boolean;

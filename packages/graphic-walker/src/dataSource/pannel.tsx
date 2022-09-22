@@ -1,10 +1,11 @@
 import React, { useRef, useCallback } from 'react';
 import { FileReader } from '@kanaries/web-data-loader';
-import { Record } from '../interfaces';
 import Table from './table';
 import styled from 'styled-components';
 import { useGlobalStore } from '../store';
 import { observer } from 'mobx-react-lite';
+import Rath from '@kanaries/rath-utils/dist/lib/global';
+
 
 const Container = styled.div`
     overflow-x: auto;
@@ -35,7 +36,7 @@ const DataSourcePanel: React.FC<DSPanelProps> = props => {
                             config: { type: 'reservoirSampling', size: Infinity },
                             onLoading: () => {}
                         }).then((data) => {
-                            commonStore.updateTempDS(data as Record[]);
+                            commonStore.updateTempDS(data as Rath.IRow[]);
                         });
                     }
                 }}

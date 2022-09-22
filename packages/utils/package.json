@@ -1,12 +1,35 @@
 {
-  "name": "rath-utils",
+  "name": "@kanaries/rath-utils",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
   "author": "",
-  "license": "ISC"
+  "scripts": {
+    "build:cjs": "tsc -p ./tsconfig.cjs.json",
+    "build:esm": "tsc -p ./tsconfig.es.json",
+    "build": "npm run build:cjs && npm run build:esm"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [],
+  "license": "ISC",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/lib/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/es/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./types": "./dist/lib/global.d.ts"
+  },
+  "prettier": {
+    "tabWidth": 4
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
+    "fs-extra": "^10.1.0",
+    "typescript": "^4.8.3"
+  }
 }

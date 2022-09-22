@@ -1,15 +1,17 @@
 import { COUNT_FIELD_ID } from '../constants';
-import { Record, Filters, IMutField, IRow } from '../interfaces';
+import { Filters, IMutField } from '../interfaces';
+import type Rath from '@kanaries/rath-utils/dist/lib/global';
+
 interface NRReturns {
-    normalizedData: Record[];
-    maxMeasures: Record;
-    minMeasures: Record;
-    totalMeasures: Record
+    normalizedData: Rath.IRow<number>[];
+    maxMeasures: Rath.IRow<number>;
+    minMeasures: Rath.IRow<number>;
+    totalMeasures: Rath.IRow<number>;
 }
-function normalizeRecords(dataSource: Record[], measures: string[]): NRReturns {
-    const maxMeasures: Record = {};
-    const minMeasures: Record = {};
-    const totalMeasures: Record = {};
+function normalizeRecords(dataSource: Rath.IRow<number>[], measures: string[]): NRReturns {
+    const maxMeasures: Rath.IRow<number> = {};
+    const minMeasures: Rath.IRow<number> = {};
+    const totalMeasures: Rath.IRow<number> = {};
     measures.forEach(mea => {
         maxMeasures[mea] = -Infinity;
         minMeasures[mea] = Infinity;
@@ -21,9 +23,9 @@ function normalizeRecords(dataSource: Record[], measures: string[]): NRReturns {
             minMeasures[mea] = Math.min(record[mea], minMeasures[mea])
         })
     })
-    const newData: Record[] = [];
+    const newData: Rath.IRow<number>[] = [];
     dataSource.forEach(record => {
-        const norRecord: Record = { ... record };
+        const norRecord: Rath.IRow<number> = { ... record };
         measures.forEach(mea => {
             // norRecord[mea] = norRecord[mea] - minMeasures[mea]
             totalMeasures[mea] += Math.abs(norRecord[mea]);
@@ -32,7 +34,7 @@ function normalizeRecords(dataSource: Record[], measures: string[]): NRReturns {
     })
     newData.forEach(record => {
         measures.forEach(mea => {
-            record[mea] /= totalMeasures[mea];
+            (record[mea] as number) /= totalMeasures[mea] as number;
         })
     })
     return {
@@ -43,10 +45,10 @@ function normalizeRecords(dataSource: Record[], measures: string[]): NRReturns {
     }
 }
 
-function normalize2PositiveRecords(dataSource: Record[], measures: string[]): NRReturns {
-  const maxMeasures: Record = {};
-  const minMeasures: Record = {};
-  const totalMeasures: Record = {};
+function normalize2PositiveRecords(dataSource: Rath.IRow<number>[], measures: string[]): NRReturns {
+  const maxMeasures: Rath.IRow<number> = {};
+  const minMeasures: Rath.IRow<number> = {};
+  const totalMeasures: Rath.IRow<number> = {};
   measures.forEach((mea) => {
     maxMeasures[mea] = -Infinity;
     minMeasures[mea] = Infinity;
@@ -58,9 +60,9 @@ function normalize2PositiveRecords(dataSource: Record[], measures: string[]): NR
       minMeasures[mea] = Math.min(record[mea], minMeasures[mea]);
     });
   });
-  const newData: Record[] = [];
+  const newData: Rath.IRow<number>[] = [];
   dataSource.forEach((record) => {
-    const norRecord: Record = { ...record };
+    const norRecord: Rath.IRow<number> = { ...record };
     measures.forEach((mea) => {
       norRecord[mea] = norRecord[mea] - minMeasures[mea]
       totalMeasures[mea] += norRecord[mea];
@@ -83,7 +85,7 @@ function normalize2PositiveRecords(dataSource: Record[], measures: string[]): NR
   };
 }
 
-export function checkMajorFactor(data: Record[], childrenData: Map<any, Record[]>, dimensions: string[], measures: string[]): { majorKey: string; majorSum: number } {
+export function checkMajorFactor(data: Rath.IRow<number>[], childrenData: Map<any, Rath.IRow<number>[]>, dimensions: string[], measures: string[]): { majorKey: string; majorSum: number } {
     const { normalizedData, maxMeasures, minMeasures, totalMeasures } = normalizeRecords(data, measures);
     let majorSum = Infinity;
     let majorKey = '';
@@ -114,8 +116,8 @@ export function checkMajorFactor(data: Record[], childrenData: Map<any, Record[]
     return { majorKey, majorSum };
 }
 
-export function checkChildOutlier(data: Record[], childrenData: Map<any, Record[]>, dimensions: string[], measures: string[]): { outlierKey: string; outlierSum: number } {
-    // const { normalizedData, maxMeasures, minMeasures, totalMeasures } = normalize2PositiveRecords(data, measures);
+export function checkChildOutlier(data: Rath.IRow<number>[], childrenData: Map<any, Rath.IRow<number>[]>, dimensions: string[], measures: string[]): { outlierKey: string; outlierSum: number } {
+    // const { normalizedData, maxMeasures, minMeasures, totalMeasures } = normalize2PositiveRath.IRows(data, measures);
     const { normalizedData, maxMeasures, minMeasures, totalMeasures } = normalizeRecords(data, measures);
     let outlierSum = -Infinity;
     let outlierKey = '';
@@ -151,7 +153,7 @@ export interface IPredicate {
     type: 'discrete' | 'continuous';
     range: Set<any> | [number, number];
 }
-export function getPredicates(selection: Record[], dimensions: string[], measures: string[]): IPredicate[] {
+export function getPredicates(selection: Rath.IRow<number>[], dimensions: string[], measures: string[]): IPredicate[] {
     const predicates: IPredicate[] = [];
     dimensions.forEach(dim => {
         predicates.push({
@@ -197,7 +199,7 @@ export function getPredicatesFromVegaSignals(signals: Filters, dimensions: strin
     return predicates;
 }
 
-export function filterByPredicates(data: Record[], predicates: IPredicate[]): Record[] {
+export function filterByPredicates(data: Rath.IRow[], predicates: IPredicate[]): Rath.IRow[] {
     const filterData = data.filter((record) => {
       return predicates.every((pre) => {
         if (pre.type === 'continuous') {
@@ -213,7 +215,7 @@ export function filterByPredicates(data: Record[], predicates: IPredicate[]): Re
     return filterData;
 }
 
-export function applyFilters(dataSource: Record[], filters: Filters): Record[] {
+export function applyFilters(dataSource: Rath.IRow[], filters: Filters): Rath.IRow[] {
     let filterKeys = Object.keys(filters);
     return dataSource.filter((record) => {
         let keep = true;
@@ -229,8 +231,8 @@ export function applyFilters(dataSource: Record[], filters: Filters): Record[] {
     });
 }
 
-export function extendCountField (dataSource: IRow[], fields: IMutField[]): {
-    dataSource: IRow[];
+export function extendCountField (dataSource: Rath.IRow[], fields: IMutField[]): {
+    dataSource: Rath.IRow[];
     fields: IMutField[];
 } {
     const nextData = dataSource.map(r => ({

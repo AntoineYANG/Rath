@@ -2,12 +2,13 @@ import React, { useEffect, useState, useMemo, useRef } from 'react';
 import embed from 'vega-embed';
 import { Insight, Utils, UnivariateSummary } from 'visual-insights';
 import ReactJson from 'react-json-view';
-import { IField, Filters, IMeasure, IRow } from '../interfaces';
+import { IField, Filters, IMeasure } from '../interfaces';
 import { baseVis, IReasonType } from './std2vegaSpec';
 import { getExplaination, IVisSpace } from '../services';
 import RadioGroupButtons from './radioGroupButtons';
 import { IExplaination, IMeasureWithStat } from '../insights';
 import { formatFieldName, mergeMeasures } from './utils'
+import type Rath from '@kanaries/rath-utils/dist/lib/global';
 
 
 const collection  = Insight.IntentionWorkerCollection.init();
@@ -25,7 +26,7 @@ interface SubSpace {
 }
 
 interface InsightMainBoardProps {
-  dataSource: IRow[];
+  dataSource: Rath.IRow[];
   fields: Readonly<IField[]>;
   filters?: Filters;
   viewDs: IField[];

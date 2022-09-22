@@ -1,7 +1,10 @@
 import { ISemanticType, Specification } from 'visual-insights';
-import { IField, IRow } from '../interfaces';
+import { IField } from '../interfaces';
 import { Utils } from 'visual-insights';
 import { IPredicate } from '../utils';
+import type Rath from '@kanaries/rath-utils/dist/lib/global';
+
+
 export type IReasonType = 'selection_dim_distribution' | 'selection_mea_distribution' | 'children_major_factor' | 'children_outlier';
 export const geomTypeMap: { [key: string]: any } = {
     interval: 'bar',
@@ -12,7 +15,7 @@ export const geomTypeMap: { [key: string]: any } = {
 };
 export function baseVis(
     query: Specification,
-    dataSource: IRow[],
+    dataSource: Rath.IRow[],
     dimensions: string[],
     measures: string[],
     predicates: IPredicate[] | null,

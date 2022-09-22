@@ -1,15 +1,17 @@
-import { IRow, IMutField } from '../interfaces';
+import { IMutField } from '../interfaces';
 import { Insight } from 'visual-insights';
+import type Rath from '@kanaries/rath-utils/dist/lib/global';
 
-export function transData(dataSource: IRow[]): {
-    dataSource: IRow[];
+
+export function transData(dataSource: Rath.IRow[]): {
+    dataSource: Rath.IRow[];
     fields: IMutField[]
 } {
     if (dataSource.length === 0) return {
         dataSource: [],
         fields: []
     };
-    let ans: IRow[] = [];
+    let ans: Rath.IRow[] = [];
     const keys = Object.keys(dataSource[0]);
     // TODO: 冗余设计，单变量统计被进行了多次重复计算。另外对于这种不完整的分析任务，不建议使用VIEngine。
     const vie = new Insight.VIEngine();
@@ -25,7 +27,7 @@ export function transData(dataSource: IRow[]): {
     vie.univarSelection('percent', 1);
     const fields = vie.fields;
     for (let record of dataSource) {
-        const newRecord: IRow = {};
+        const newRecord: Rath.IRow = {};
         for (let field of fields) {
             if (field.dataType === 'number' || field.dataType === 'integer') {
                 newRecord[field.key] = Number(record[field.key])

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IMutField, IRow } from './interfaces';
+import { IMutField } from './interfaces';
 import VisualSettings from './visualSettings';
 import { Container, NestContainer } from './components/container';
 import ClickMenu from './components/clickMenu';
@@ -23,10 +23,11 @@ import { useTranslation } from 'react-i18next';
 import { mergeLocaleRes, setLocaleLanguage } from './locales/i18n';
 import Menubar from './visualSettings/menubar';
 import FilterField from './fields/filterField';
+import type Rath from '@kanaries/rath-utils/dist/lib/global';
 
 
 export interface EditorProps {
-	dataSource?: IRow[];
+	dataSource?: Rath.IRow[];
 	rawFields?: IMutField[];
 	spec?: Specification;
 	i18nLang?: string;

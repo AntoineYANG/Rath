@@ -1,21 +1,8 @@
 import { StatFuncName } from "visual-insights/build/esm/statistics";
 import { AggFC } from 'cube-core/built/types';
 import { IAnalyticType, IMutField as VIMutField, ISemanticType } from 'visual-insights';
+import type Rath from '@kanaries/rath-utils/dist/lib/global';
 
-/**
- * @deprecated
- */
-export interface Record {
-    [key: string]: any;
-}
-
-export interface IRow {
-    [key: string]: any;
-}
-/**
- * @deprecated
- */
-export type SemanticType = 'quantitative' | 'nominal' | 'ordinal' | 'temporal';
 
 export interface Filters {
     [key: string]: any[];
@@ -64,7 +51,7 @@ export interface DataSet {
     id: string;
     name: string;
     rawFields: IMutField[];
-    dataSource: IRow[];
+    dataSource: Rath.IRow[];
 }
 
 export interface IFieldNeighbor {
@@ -89,12 +76,12 @@ export interface IDataSet {
 export interface IDataSetInfo {
     name: string;
     rawFields: IMutField[];
-    dataSource: IRow[]
+    dataSource: Rath.IRow[]
 }
 
 export interface IDataSource {
     id: string;
-    data: IRow[]
+    data: Rath.IRow[]
 }
 
 export interface IFilterField extends IViewField {

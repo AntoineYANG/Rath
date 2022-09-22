@@ -2,9 +2,9 @@
 /* eslint-disable */ 
 
 /**
- * @param {import('../interfaces').IRow[]} dataSource
+ * @param {import('@kanaries/rath-utils/dist/lib/global').default.IRow[]} dataSource
  * @param {import('../interfaces').IFilterField[]} filters
- * @return {import('../interfaces').IRow[]}
+ * @return {import('@kanaries/rath-utils/dist/lib/global').default.IRow[]}
  */
 const filter = (dataSource, filters) => {
     return dataSource.filter(which => {
@@ -57,7 +57,7 @@ const filter = (dataSource, filters) => {
 };
 
 /**
- * @param {MessageEvent<{ dataSource: import('../interfaces').IRow[]; filters: import('../interfaces').IFilterField[] }>} e
+ * @param {MessageEvent<{ dataSource: import('@kanaries/rath-utils/dist/lib/global').default.IRow[]; filters: import('../interfaces').IFilterField[] }>} e
  */
 const main = e => {
     const { dataSource, filters } = e.data;

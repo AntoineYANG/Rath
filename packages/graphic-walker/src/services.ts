@@ -1,4 +1,4 @@
-import { IRow, Filters, SemanticType, IMeasure, IMutField, IFilterField } from './interfaces';
+import {  Filters, IMeasure, IMutField, IFilterField } from './interfaces';
 // import { Insight } from 'visual-insights';
 /* eslint import/no-webpack-loader-syntax:0 */
 // @ts-ignore
@@ -12,6 +12,8 @@ import FilterWorker from './workers/filter.worker?worker&inline';
 import { View, Specification } from 'visual-insights';
 import { IExplaination, IMeasureWithStat } from './insights';
 import { toJS } from 'mobx';
+import type Rath from '@kanaries/rath-utils/dist/lib/global';
+
 
 interface WorkerState {
     eWorker: Worker | null;
@@ -39,7 +41,7 @@ function workerService<T, R>(worker: Worker, data: R): Promise<T> {
 interface ExplainParams {
     dimensions: string[];
     measures: string[];
-    dataSource: IRow[];
+    dataSource: Rath.IRow[];
     filters?: Filters;
     currentSpace: {
         dimensions: string[];
@@ -47,14 +49,14 @@ interface ExplainParams {
     };
 }
 export interface IVisSpace {
-    dataView: IRow[];
+    dataView: Rath.IRow[];
     schema: Specification;
 }
 interface ExplainReturns {
     explainations: IExplaination[];
     valueExp: IMeasureWithStat[];
     visSpaces: IVisSpace[];
-    fieldsWithSemanticType: Array<{ key: string; type: SemanticType }>;
+    fieldsWithSemanticType: Array<{ key: string; type: Rath.SemanticType }>;
 }
 export async function getExplaination(props: ExplainParams) {
     const worker = workerState.eWorker;
@@ -82,7 +84,7 @@ export async function getExplaination(props: ExplainParams) {
 
 interface PreAnalysisParams {
     fields: IMutField[];
-    dataSource: IRow[];
+    dataSource: Rath.IRow[];
 }
 export async function preAnalysis(props: PreAnalysisParams) {
     if (workerState.eWorker !== null) {
@@ -106,7 +108,7 @@ export function destroyWorker() {
 let filterWorker: Worker | null = null;
 let filterWorkerAutoTerminator: NodeJS.Timeout | null = null;
 
-export const applyFilter = async (data: readonly IRow[], filters: readonly IFilterField[]): Promise<IRow[]> => {
+export const applyFilter = async (data: readonly Rath.IRow[], filters: readonly IFilterField[]): Promise<Rath.IRow[]> => {
     if (filterWorkerAutoTerminator !== null) {
         clearTimeout(filterWorkerAutoTerminator);
         filterWorkerAutoTerminator = null;
@@ -117,7 +119,7 @@ export const applyFilter = async (data: readonly IRow[], filters: readonly IFilt
     }
 
     try {
-        const res: IRow[] = await workerService(filterWorker, {
+        const res: Rath.IRow[] = await workerService(filterWorker, {
             dataSource: data,
             filters: toJS(filters),
         });
